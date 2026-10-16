@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторна робота №1</title>
+    <script>
+        let product = ["Олівець", "Органайзер", "Обкладинка"];
+        let quantity = [150, 45, 200];
+        let cost = [12.5, 180.0, 25.0];
+        let idx6 = -1;
+
+        function calculation() {
+            let x = 5, y = 3, z = 4;
+            alert("F = " + (2 * x + 3 * y - z));
+        }
+
+        function calculateBranch() {
+            let x = Number(document.getElementById("t_x").value);
+            let y = Number(document.getElementById("t_y").value);
+            let F;
+
+            if (x > 0 && y > 0) {
+                F = (x / y) + x * y * y;
+            } else if ((-x + y) / 2 > 0) {
+                F = y / x;
+            } else {
+                F = x * x;
+            }
+
+            document.getElementById("t_F").value = F;
+        }
+
+        function calculateSeries() {
+            let x = Number(document.getElementById("t_x_s").value);
+            let y = Number(document.getElementById("t_y_s").value);
+            let sum = 0;
+
+            let num = (x / y) + (x * x / 3);
+            let denBase = x * x * y * y;
+
+            for (let i = 5; i <= 8; i++) {
+                let fact = 1;
+                for (let j = 1; j <= i + 1; j++) {
+                    fact *= j;
+                }
+                
+                let sign = (i + 1) % 2 === 0 ? 1 : -1;
+                sum += sign * (num / (denBase * fact));
+            }
+
+            document.getElementById("t_sum").value = sum;
+        }
+
+        function fun1() {
+            let name = document.form1.name_cont.value.trim();
+            idx6 = -1;
+
+            for (let i = 0; i < product.length; i++) {
+                if (product[i].toLowerCase() === name.toLowerCase()) {
+                    idx6 = i;
+                    break;
+                }
+            }
+
+            if (idx6 !== -1) {
+                document.form1.output_quantity.value = "Кількість: " + quantity[idx6] + " шт.";
+                document.form1.output_cost.value = "Ціна: " + cost[idx6] + " грн.";
+            } else {
+                document.form1.output_quantity.value = "Товар не знайдено!";
+                document.form1.output_cost.value = "";
+            }
+        }
+
+        function fun2() {
+            if (idx6 !== -1) {
+                alert("Загальна сума: " + (quantity[idx6] * cost[idx6]) + " грн.");
+            } else {
+                alert("Спочатку знайдіть товар!");
+            }
+        }
+
+        function initTask7() {
+            let sel = document.form7.select_product;
+            sel.options.length = 0;
+            for (let i = 0; i < product.length; i++) {
+                sel.options[i] = new Option(product[i], i);
+            }
+            fun1_task7();
+        }
+
+        function fun1_task7() {
+            let idx = document.form7.select_product.value;
+            document.form7.output_quantity7.value = "Кількість: " + quantity[idx] + " шт.";
+            document.form7.output_cost7.value = "Ціна: " + cost[idx] + " грн.";
+        }
+
+        function fun2_task7() {
+            let idx = document.form7.select_product.value;
+            alert("Загальна сума: " + (quantity[idx] * cost[idx]) + " грн.");
+        }
+    </script>
+</head>
+<body onLoad="initTask7()">
+
+    <h3>Завдання 1</h3>
+    <p>Це звичайний HTML абзац.</p>
+    <script>
+        document.write("Привіт! Мене звати Зеленський Арсеній Іванович, студент групи ІПЗ-22.");
+    </script>
+    <p>Знову звичайний HTML абзац.</p>
+    <input type="button" value="Click me" onClick="alert('Я народився 08.04.2008 року в селищі Верховина')">
+
+    <hr>
+
+    <h3>Завдання 2</h3>
+    <p>F = 2x + 3y - z</p>
+    <input type="button" value="Calculate" onClick="calculation()">
+
+    <hr>
+
+    <h3>Завдання 3</h3>
+    <form id="main_form">
+        Поле з подібною реакцією:<br>
+        <input type="text" size="60" value="Текст" 
+               onBlur="document.getElementById('t_res').value = 'Подія onBlur';" 
+               onMouseOver="document.getElementById('t_res').value = 'Подія onMouseOver';"><br><br>
+        
+        Результат:<br>
+        <input type="text" size="60" id="t_res" readonly>
+    </form>
+
+    <hr>
+
+    <h3>Завдання 4</h3>
+    x = <input type="text" id="t_x" value="2"><br>
+    y = <input type="text" id="t_y" value="3"><br>
+    F = <input type="text" id="t_F" readonly><br><br>
+    <input type="button" value="Розрахувати F" onClick="calculateBranch()">
+
+    <hr>
+
+    <h3>Завдання 5</h3>
+    x = <input type="text" id="t_x_s" value="2"><br>
+    y = <input type="text" id="t_y_s" value="3"><br>
+    Сума = <input type="text" id="t_sum" size="30" readonly><br><br>
+    <input type="button" value="Розрахувати суму" onClick="calculateSeries()">
+
+    <hr>
+
+    <h3>Завдання 6</h3>
+    <form name="form1">
+        Назва товару (Олівець, Органайзер, Обкладинка):<br>
+        <input type="text" name="name_cont">
+        <input type="button" value="Наявна кількість і вартість" onClick="fun1()"><br><br>
+
+        <input type="text" size="50" name="output_quantity" readonly><br>
+        <input type="text" size="50" name="output_cost" readonly><br><br>
+
+        <input type="button" value="Загальна сума" onClick="fun2()">
+    </form>
+
+    <hr>
+
+    <h3>Завдання 7</h3>
+    <form name="form7">
+        Виберіть товар:<br>
+        <select name="select_product" onChange="fun1_task7()">
+        </select>
+        <input type="button" value="Наявна кількість і вартість" onClick="fun1_task7()"><br><br>
+
+        <input type="text" size="50" name="output_quantity7" readonly><br>
+        <input type="text" size="50" name="output_cost7" readonly><br><br>
+
+        <input type="button" value="Загальна сума" onClick="fun2_task7()">
+    </form>
+
+</body>
+</html>
