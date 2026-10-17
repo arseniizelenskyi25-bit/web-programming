@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторна робота №3</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    .task-block {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      max-width: 500px;
+    }
+    .input-group {
+      margin-bottom: 10px;
+    }
+    .input-group label {
+      display: inline-block;
+      width: 140px;
+    }
+    .input-group input {
+      width: 80px;
+      padding: 4px;
+    }
+    .result-box {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    .calc-container {
+      width: 280px;
+      background-color: #bbd5ff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    .calc-display-box {
+      background: white;
+      border: 2px solid #a8a8a8;
+      border-radius: 5px;
+      padding: 5px 10px;
+      text-align: right;
+      margin-bottom: 8px;
+    }
+    .calc-main-val {
+      font-size: 32px;
+      font-weight: bold;
+      color: #222;
+      min-height: 38px;
+      word-wrap: break-word;
+    }
+    .calc-sub-val {
+      font-size: 13px;
+      color: #888;
+      border-top: 1px solid #ddd;
+      padding-top: 2px;
+      min-height: 16px;
+    }
+    .calc-icons {
+      font-size: 14px;
+      color: #777;
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+    }
+    .mode-btn {
+      width: 100%;
+      padding: 6px;
+      margin-bottom: 8px;
+      font-weight: bold;
+      background-color: #4b6b94;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .mode-btn:hover {
+      background-color: #385273;
+    }
+    .calc-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 6px;
+    }
+    .eng-grid {
+      display: none;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+    .calc-btn {
+      height: 45px;
+      font-size: 18px;
+      font-weight: bold;
+      border: 1px solid #bbb;
+      border-radius: 4px;
+      cursor: pointer;
+      background-color: #f0f0f0;
+      color: #004499;
+    }
+    .calc-btn:hover {
+      opacity: 0.85;
+    }
+    .btn-gray {
+      background-color: #888888;
+      color: white;
+    }
+    .btn-red {
+      background-color: #dd0000;
+      color: white;
+    }
+    .btn-blue {
+      background-color: #0055bb;
+      color: white;
+      grid-row: span 2;
+      height: 96px;
+    }
+    .btn-eng {
+      background-color: #6c757d;
+      color: white;
+      font-size: 15px;
+      height: 38px;
+    }
+    .gallery-box {
+      text-align: center;
+    }
+    .gallery-img {
+      width: 100%;
+      max-height: 280px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    .gallery-controls {
+      margin-top: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .gallery-btn {
+      padding: 8px 16px;
+      font-size: 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .gallery-btn:hover {
+      background-color: #0056b3;
+    }
+    .gallery-info {
+      font-size: 14px;
+      font-weight: bold;
+      color: #555;
+    }
+    .tree-list {
+      list-style-type: none;
+      padding-left: 10px;
+    }
+    .tree-header {
+      font-weight: bold;
+      font-size: 18px;
+      cursor: pointer;
+      user-select: none;
+      color: #0056b3;
+      margin-top: 10px;
+    }
+    .tree-header:hover {
+      text-decoration: underline;
+    }
+    .tree-sublist {
+      list-style-type: decimal;
+      padding-left: 25px;
+      margin-top: 5px;
+    }
+    .btn-action {
+      padding: 8px 14px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .btn-action:hover {
+      background-color: #218838;
+    }
+    .card-style {
+      padding: 10px;
+      border: 1px dashed #007bff;
+      background-color: #f0f8ff;
+      margin-bottom: 10px;
+    }
+    #alert-box {
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      margin-bottom: 10px;
+      transition: background-color 0.3s, color 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Лабораторна робота №3</h1>
+
+  <div class="task-block">
+    <h2>Завдання 1: Площа прямокутника (Варіант 4)</h2>
+    <p>Розрахунок відбувається автоматично при зміні чисел у полях.</p>
+
+    <div class="input-group">
+      <label for="side-a">Сторона a (см):</label>
+      <input type="number" id="side-a" value="5" min="0">
+    </div>
+
+    <div class="input-group">
+      <label for="side-b">Сторона b (см):</label>
+      <input type="number" id="side-b" value="10" min="0">
+    </div>
+
+    <div id="result-1" class="result-box">
+      Площа S = 50 см²
+    </div>
+  </div>
+
+  <div class="task-block">
+    <h2>Завдання 2 та 3: Калькулятор (з інженерним режимом)</h2>
+    
+    <div class="calc-container">
+      <button id="toggle-eng-btn" class="mode-btn">Переключити на Інженерний</button>
+
+      <div class="calc-display-box">
+        <div id="calc-main" class="calc-main-val">0</div>
+        <div id="calc-sub" class="calc-sub-val"></div>
+      </div>
+
+      <div class="calc-icons">
+        <span>&#x23FB;</span>
+        <span>&#x1F528;</span>
+        <span>&#x1F41B;</span>
+      </div>
+
+      <div id="eng-panel" class="eng-grid">
+        <button class="calc-btn btn-eng" data-eng="sqrt">&radic;</button>
+        <button class="calc-btn btn-eng" data-eng="sqr">x&sup2;</button>
+        <button class="calc-btn btn-eng" data-eng="sin">sin</button>
+        <button class="calc-btn btn-eng" data-eng="cos">cos</button>
+      </div>
+
+      <div class="calc-grid">
+        <button class="calc-btn" data-val="7">7</button>
+        <button class="calc-btn" data-val="8">8</button>
+        <button class="calc-btn" data-val="9">9</button>
+        <button class="calc-btn btn-gray" id="btn-back">&rarr;</button>
+        <button class="calc-btn btn-red" id="btn-clear">C</button>
+
+        <button class="calc-btn" data-val="4">4</button>
+        <button class="calc-btn" data-val="5">5</button>
+        <button class="calc-btn" data-val="6">6</button>
+        <button class="calc-btn btn-gray" data-action="*">&times;</button>
+        <button class="calc-btn btn-gray" data-action="/">&divide;</button>
+
+        <button class="calc-btn" data-val="1">1</button>
+        <button class="calc-btn" data-val="2">2</button>
+        <button class="calc-btn" data-val="3">3</button>
+        <button class="calc-btn btn-gray" data-action="-">&minus;</button>
+        <button class="calc-btn btn-blue" id="btn-equals">=</button>
+
+        <button class="calc-btn btn-gray" id="btn-toggle-sign">+/-</button>
+        <button class="calc-btn" data-val="0">0</button>
+        <button class="calc-btn" data-val=".">.</button>
+        <button class="calc-btn btn-gray" data-action="+">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-block">
+    <h2>Завдання 4: Перегляд зображень (JSON)</h2>
+    <div class="gallery-box">
+      <img id="gallery-image" class="gallery-img" src="" alt="Зображення">
+
+      <div class="gallery-controls">
+        <button id="btn-prev" class="gallery-btn">&larr; Назад</button>
+        <span id="gallery-counter" class="gallery-info">Зображення 1 з 4</span>
+        <button id="btn-next" class="gallery-btn">Вперед &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="task-block">
+    <h2>Завдання 5: Ієрархічне дерево</h2>
+    <p>Натискайте на розділи для їх згортання / розгортання:</p>
+
+    <ul class="tree-list">
+      <li>
+        <div class="tree-header" onclick="toggleBranch('fruits-list', this)">▼ fruits:</div>
+        <ol id="fruits-list" class="tree-sublist">
+          <li>apple</li>
+          <li>pineapple</li>
+          <li>appricot</li>
+          <li>pear</li>
+          <li>lemon</li>
+        </ol>
+      </li>
+      <li>
+        <div class="tree-header" onclick="toggleBranch('veg-list', this)">▼ vegetables:</div>
+        <ol id="veg-list" class="tree-sublist">
+          <li>potatoes</li>
+          <li>beetroot</li>
+          <li>carrots</li>
+          <li>pear</li>
+        </ol>
+      </li>
+    </ul>
+  </div>
+
+  <div class="task-block">
+    <h2>Завдання 6.1: Заміна вмісту блоку card</h2>
+    <div id="card" class="card-style">
+      <p>Початковий вміст блоку card.</p>
+    </div>
+    <button id="btn-toggle-card" class="btn-action">Перейти в кінцевий стан</button>
+  </div>
+
+  <div class="task-block">
+    <h2>Завдання 6.2: Робота з посиланням</h2>
+    <p>
+      Завантажити файл: 
+      <a id="download-link" href="https://example.com/document.pdf">Завантажити документ (PDF)</a>
+    </p>
+    <button id="btn-check-link" class="btn-action">Прочитати href та додати target="_blank"</button>
+  </div>
+
+  <div class="task-block">
+    <h2>Завдання 6.3: Зміна фону alert-box на 3 секунди</h2>
+    <div id="alert-box">
+      Це текстовий блок alert-box. Натисніть кнопку нижче, щоб змінити колір фону.
+    </div>
+    <button id="btn-trigger-alert" class="btn-action">Змінити фон на 3 секунди</button>
+  </div>
+
+  <script>
+    let inputA = document.getElementById('side-a');
+    let inputB = document.getElementById('side-b');
+    let resultDiv = document.getElementById('result-1');
+
+    function calculateRectangleArea() {
+      let a = parseFloat(inputA.value);
+      let b = parseFloat(inputB.value);
+
+      if (isNaN(a) || isNaN(b) || a <= 0 || b <= 0) {
+        resultDiv.textContent = 'Введіть коректні додатні числа!';
+        return;
+      }
+
+      let area = a * b;
+      resultDiv.textContent = 'Площа S = ' + area + ' см²';
+    }
+
+    inputA.addEventListener('input', calculateRectangleArea);
+    inputB.addEventListener('input', calculateRectangleArea);
+    calculateRectangleArea();
+
+
+    let mainDisplay = document.getElementById('calc-main');
+    let subDisplay = document.getElementById('calc-sub');
+
+    let currentInput = "0";
+    let previousInput = "";
+    let operation = null;
+    let isNewNumber = true;
+
+    function updateDisplays() {
+      mainDisplay.textContent = currentInput;
+    }
+
+    let digitButtons = document.querySelectorAll('.calc-btn[data-val]');
+    digitButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        let val = button.getAttribute('data-val');
+
+        if (val === '.') {
+          if (isNewNumber) {
+            currentInput = "0.";
+            isNewNumber = false;
+          } else if (!currentInput.includes('.')) {
+            currentInput += '.';
+          }
+          updateDisplays();
+          return;
+        }
+
+        if (currentInput === "0" || isNewNumber) {
+          currentInput = val;
+          isNewNumber = false;
+        } else {
+          currentInput += val;
+        }
+        updateDisplays();
+      });
+    });
+
+    let actionButtons = document.querySelectorAll('.calc-btn[data-action]');
+    actionButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        let op = button.getAttribute('data-action');
+
+        if (operation !== null && !isNewNumber) {
+          executeCalculation();
+        }
+
+        previousInput = currentInput;
+        operation = op;
+        isNewNumber = true;
+
+        let symbol = op;
+        if (op === '*') symbol = '×';
+        if (op === '/') symbol = '÷';
+
+        subDisplay.textContent = previousInput + ' ' + symbol;
+      });
+    });
+
+    function executeCalculation() {
+      if (operation === null || previousInput === "") return;
+
+      let num1 = parseFloat(previousInput);
+      let num2 = parseFloat(currentInput);
+      let result = 0;
+
+      if (operation === '+') result = num1 + num2;
+      if (operation === '-') result = num1 - num2;
+      if (operation === '*') result = num1 * num2;
+      if (operation === '/') {
+        if (num2 === 0) {
+          alert("Помилка! Ділення на 0");
+          return;
+        }
+        result = num1 / num2;
+      }
+
+      let symbol = operation;
+      if (operation === '*') symbol = '×';
+      if (operation === '/') symbol = '÷';
+
+      subDisplay.textContent = previousInput + symbol + currentInput + '=' + result;
+      currentInput = String(result);
+      operation = null;
+      isNewNumber = true;
+      updateDisplays();
+    }
+
+    document.getElementById('btn-equals').addEventListener('click', executeCalculation);
+
+    document.getElementById('btn-toggle-sign').addEventListener('click', () => {
+      if (currentInput === "0") return;
+
+      if (currentInput.startsWith('-')) {
+        currentInput = currentInput.slice(1);
+      } else {
+        currentInput = '-' + currentInput;
+      }
+      updateDisplays();
+    });
+
+    document.getElementById('btn-back').addEventListener('click', () => {
+      if (isNewNumber) return;
+
+      if (currentInput.length === 1 || (currentInput.length === 2 && currentInput.startsWith('-'))) {
+        currentInput = "0";
+        isNewNumber = true;
+      } else {
+        currentInput = currentInput.slice(0, -1);
+      }
+      updateDisplays();
+    });
+
+    document.getElementById('btn-clear').addEventListener('click', () => {
+      currentInput = "0";
+      previousInput = "";
+      operation = null;
+      isNewNumber = true;
+      mainDisplay.textContent = "0";
+      subDisplay.textContent = "";
+    });
+
+    let toggleEngBtn = document.getElementById('toggle-eng-btn');
+    let engPanel = document.getElementById('eng-panel');
+
+    toggleEngBtn.addEventListener('click', () => {
+      if (engPanel.style.display === 'grid') {
+        engPanel.style.display = 'none';
+        toggleEngBtn.textContent = 'Переключити на Інженерний';
+      } else {
+        engPanel.style.display = 'grid';
+        toggleEngBtn.textContent = 'Переключити на Простий';
+      }
+    });
+
+    let engButtons = document.querySelectorAll('.calc-btn[data-eng]');
+    engButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        let type = button.getAttribute('data-eng');
+        let num = parseFloat(currentInput);
+        let result = 0;
+
+        if (type === 'sqrt') {
+          if (num < 0) {
+            alert("Помилка! Від'ємне число під коренем");
+            return;
+          }
+          result = Math.sqrt(num);
+          subDisplay.textContent = '√(' + num + ') = ' + result;
+        }
+
+        if (type === 'sqr') {
+          result = Math.pow(num, 2);
+          subDisplay.textContent = '(' + num + ')² = ' + result;
+        }
+
+        if (type === 'sin') {
+          result = Math.sin(num);
+          subDisplay.textContent = 'sin(' + num + ') = ' + result;
+        }
+
+        if (type === 'cos') {
+          result = Math.cos(num);
+          subDisplay.textContent = 'cos(' + num + ') = ' + result;
+        }
+
+        currentInput = String(result);
+        isNewNumber = true;
+        updateDisplays();
+      });
+    });
+
+
+    let jsonImagesData = '["https://picsum.photos/id/10/400/250", "https://picsum.photos/id/11/400/250", "https://picsum.photos/id/12/400/250", "https://picsum.photos/id/13/400/250"]';
+    let imageList = JSON.parse(jsonImagesData);
+    let currentImageIndex = 0;
+
+    let imgElement = document.getElementById('gallery-image');
+    let counterElement = document.getElementById('gallery-counter');
+    let prevBtn = document.getElementById('btn-prev');
+    let nextBtn = document.getElementById('btn-next');
+
+    function updateGallery() {
+      imgElement.src = imageList[currentImageIndex];
+      counterElement.textContent = 'Зображення ' + (currentImageIndex + 1) + ' з ' + imageList.length;
+    }
+
+    prevBtn.addEventListener('click', () => {
+      currentImageIndex--;
+      if (currentImageIndex < 0) {
+        currentImageIndex = imageList.length - 1;
+      }
+      updateGallery();
+    });
+
+    nextBtn.addEventListener('click', () => {
+      currentImageIndex++;
+      if (currentImageIndex >= imageList.length) {
+        currentImageIndex = 0;
+      }
+      updateGallery();
+    });
+
+    updateGallery();
+
+
+    function toggleBranch(listId, headerElement) {
+      let sublist = document.getElementById(listId);
+
+      if (sublist.style.display === 'none') {
+        sublist.style.display = 'block';
+        headerElement.textContent = headerElement.textContent.replace('►', '▼');
+      } else {
+        sublist.style.display = 'none';
+        headerElement.textContent = headerElement.textContent.replace('▼', '►');
+      }
+    }
+
+
+    let cardDiv = document.getElementById('card');
+    let btnToggleCard = document.getElementById('btn-toggle-card');
+    let initialCardHTML = cardDiv.innerHTML;
+    let finalCardHTML = '<h3>Новий заголовок картки</h3><p>Це новий замінений абзац тексту, згенерований через JavaScript.</p>';
+    let isFinalState = false;
+
+    btnToggleCard.addEventListener('click', () => {
+      if (!isFinalState) {
+        cardDiv.innerHTML = finalCardHTML;
+        btnToggleCard.textContent = 'Перейти в початковий стан';
+        isFinalState = true;
+      } else {
+        cardDiv.innerHTML = initialCardHTML;
+        btnToggleCard.textContent = 'Перейти в кінцевий стан';
+        isFinalState = false;
+      }
+    });
+
+    let downloadLink = document.getElementById('download-link');
+    let btnCheckLink = document.getElementById('btn-check-link');
+
+    btnCheckLink.addEventListener('click', () => {
+      let hrefValue = downloadLink.getAttribute('href');
+      console.log("[Завдання 6.2] Значення атрибута href:", hrefValue);
+
+      downloadLink.setAttribute('target', '_blank');
+      alert("Атрибут target='_blank' успішно додано! Значення href виведено у консоль (F12).");
+    });
+
+    let alertBox = document.getElementById('alert-box');
+    let btnTriggerAlert = document.getElementById('btn-trigger-alert');
+
+    btnTriggerAlert.addEventListener('click', () => {
+      alertBox.style.backgroundColor = 'red';
+      alertBox.style.color = 'white';
+
+      setTimeout(() => {
+        alertBox.style.backgroundColor = '';
+        alertBox.style.color = '';
+      }, 3000);
+    });
+  </script>
+
+</body>
+</html>
