@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторна робота №2</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f9f9f9;
+    }
+    .task-block {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 20px;
+      max-width: 500px;
+    }
+    #calc-display {
+      width: 100%;
+      height: 35px;
+      font-size: 18px;
+      text-align: right;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+      padding: 5px;
+    }
+    .calc-buttons {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+    }
+    .calc-buttons button {
+      padding: 10px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .matrix-table {
+      margin-top: 10px;
+      border-collapse: collapse;
+    }
+    .matrix-table td {
+      padding: 3px;
+    }
+    .matrix-table input {
+      width: 50px;
+      text-align: center;
+    }
+    .btn-run {
+      padding: 8px 15px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    .btn-run:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Лабораторна робота №2</h1>
+
+  <div class="task-block">
+    <h2>Завдання 1: Годинник</h2>
+    <p>Формат: <code>year-moun-day-hour-min-sec</code></p>
+    <div id="clock" style="font-size: 18px; font-weight: bold; text-align: center; background: #eee; padding: 10px;">
+      0000-00-00-00-00-00
+    </div>
+  </div>
+
+  <div class="task-block">
+    <h2>Завдання 2: Калькулятор</h2>
+    <input type="text" id="calc-display" readonly>
+
+    <div class="calc-buttons">
+      <button onclick="clearDisplay()" style="grid-column: span 2; background-color: #ffcccc;">C</button>
+      <button onclick="addSymbol('/')">/</button>
+      <button onclick="addSymbol('*')">*</button>
+
+      <button onclick="addSymbol('7')">7</button>
+      <button onclick="addSymbol('8')">8</button>
+      <button onclick="addSymbol('9')">9</button>
+      <button onclick="addSymbol('-')">-</button>
+
+      <button onclick="addSymbol('4')">4</button>
+      <button onclick="addSymbol('5')">5</button>
+      <button onclick="addSymbol('6')">6</button>
+      <button onclick="addSymbol('+')">+</button>
+
+      <button onclick="addSymbol('1')">1</button>
+      <button onclick="addSymbol('2')">2</button>
+      <button onclick="addSymbol('3')">3</button>
+      <button onclick="calculate()" style="grid-row: span 2; background-color: #ccffcc;">=</button>
+
+      <button onclick="addSymbol('0')" style="grid-column: span 2;">0</button>
+      <button onclick="addSymbol('.')">.</button>
+    </div>
+  </div>
+
+  <div class="task-block" style="max-width: 600px;">
+    <h2>Завдання 3: Генерація матриці (Варіант 4)</h2>
+    <p>Формула елемента: <code>A[i][j] = 2*i + 13*j</code></p>
+
+    <form id="main_form">
+      <table>
+        <tr>
+          <td>Кількість рядків:</td>
+          <td><input type="number" id="t_str" value="5" min="1" style="width: 60px;"></td>
+        </tr>
+        <tr>
+          <td>Кількість стовпців:</td>
+          <td><input type="number" id="t_stb" value="5" min="1" style="width: 60px;"></td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <input type="button" onclick="buildMatrix();" value="Побудувати матрицю" style="padding: 5px 10px; margin-top: 5px;">
+            <input type="button" onclick="calculateMatrix();" value="Розрахувати" style="padding: 5px 10px; margin-top: 5px;">
+          </td>
+        </tr>
+      </table>
+
+      <div id="main_div"></div>
+    </form>
+  </div>
+
+  <div class="task-block" style="max-width: 600px;">
+    <h2>Завдання 4: Дослідження методу console.log()</h2>
+    <button class="btn-run" onclick="runTask4();">Запустити Завдання 4</button>
+  </div>
+
+  <div class="task-block" style="max-width: 600px;">
+    <h2>Завдання 5: Дослідження методів консолі</h2>
+    <button class="btn-run" onclick="runTask5();">Запустити Завдання 5</button>
+  </div>
+
+  <div class="task-block" style="max-width: 600px;">
+    <h2>Завдання 6: Привітання за першою літерою імені</h2>
+    <button class="btn-run" onclick="runTask6();">Запустити Завдання 6</button>
+  </div>
+
+  <div class="task-block" style="max-width: 600px;">
+    <h2>Завдання 7: Селекціонування імен за сумою ASCII-кодів</h2>
+    <button class="btn-run" onclick="runTask7();">Запустити Завдання 7</button>
+  </div>
+
+  <script>
+    function showTime() {
+      let now = new Date();
+
+      let year = now.getFullYear();
+      let month = now.getMonth() + 1;
+      let day = now.getDate();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let seconds = now.getSeconds();
+
+      if (month < 10) month = '0' + month;
+      if (day < 10) day = '0' + day;
+      if (hours < 10) hours = '0' + hours;
+      if (minutes < 10) minutes = '0' + minutes;
+      if (seconds < 10) seconds = '0' + seconds;
+
+      let timeString = year + '-' + month + '-' + day + '-' + hours + '-' + minutes + '-' + seconds;
+
+      document.getElementById('clock').innerHTML = timeString;
+      console.log("[Завдання 1 - Час]:", timeString);
+    }
+
+    showTime();
+    setInterval(showTime, 1000);
+
+
+    let display = document.getElementById('calc-display');
+
+    function addSymbol(symbol) {
+      display.value = display.value + symbol;
+      console.log("[Завдання 2 - Натиснуто]:", symbol);
+      console.log("[Завдання 2 - Поточний вираз]:", display.value);
+    }
+
+    function clearDisplay() {
+      display.value = '';
+      console.log("[Завдання 2]: Екран очищено");
+    }
+
+    function calculate() {
+      let expression = display.value;
+
+      if (expression === '') {
+        console.warn("[Завдання 2]: Порожній вираз!");
+        return;
+      }
+
+      try {
+        let result = eval(expression);
+        console.log("[Завдання 2 - Результат]:", result);
+        display.value = result;
+      } catch (error) {
+        console.error("[Завдання 2 - Помилка]:", error.message);
+        display.value = "Помилка";
+      }
+    }
+
+
+    let rowsCount = 0;
+    let colsCount = 0;
+
+    function buildMatrix() {
+      rowsCount = parseInt(document.getElementById('t_str').value);
+      colsCount = parseInt(document.getElementById('t_stb').value);
+
+      let tableHTML = "<table class='matrix-table'>\n";
+
+      for (let i = 1; i <= rowsCount; i++) {
+        tableHTML += "<tr>\n";
+        for (let j = 1; j <= colsCount; j++) {
+          let value = 2 * i + 13 * j;
+
+          tableHTML += "<td>";
+          tableHTML += "<input type='text' id='_" + i + "_" + j + "' value='" + value + "'>";
+          tableHTML += "</td>\n";
+        }
+        tableHTML += "</tr>\n";
+      }
+
+      tableHTML += "</table>";
+
+      document.getElementById('main_div').innerHTML = tableHTML;
+      console.log("[Завдання 3]: Матрицю побудовано");
+    }
+
+    function calculateMatrix() {
+      if (rowsCount === 0 || colsCount === 0) {
+        alert("Спочатку побудуйте матрицю!");
+        return;
+      }
+
+      let sum = 0;
+      let minDimension = Math.min(rowsCount, colsCount);
+
+      for (let i = 1; i <= minDimension; i++) {
+        let inputId = "_" + i + "_" + i;
+        let val = parseInt(document.getElementById(inputId).value);
+        sum += val;
+      }
+
+      console.log("[Завдання 3 - Сума діагоналі]:", sum);
+      alert("Сума елементів з i == j: " + sum);
+    }
+
+
+    function runTask4() {
+      console.log("=== ЗАВДАННЯ 4 ===");
+
+      let num1 = 17;
+      let num2 = 5;
+      let remainder = num1 % num2;
+
+      console.log("Остача від ділення 17 на 5 =", remainder);
+
+      let isEven = (num1 % num2) === 0;
+      let check10 = (10 % 5) === 0;
+
+      console.log("17 % 5 === 0 :", isEven);
+      console.log("10 % 5 === 0 :", check10);
+
+      let numbersArray = [15, 30, 45, 60];
+
+      console.log("Елементи масиву: %d, %d, %d", numbersArray[0], numbersArray[1], numbersArray[2]);
+      console.log("Перший елемент як рядок: %s", numbersArray[0]);
+
+      let label = "Другий елемент";
+      console.log("%s дорівнює: %d", label, numbersArray[1]);
+    }
+
+
+    function runTask5() {
+      console.log("=== ЗАВДАННЯ 5 ===");
+
+      console.info("Повідомлення info");
+      console.warn("Повідомлення warn");
+      console.error("Повідомлення error");
+
+      let student = { name: "Іван", group: "ІПЗ-21", age: 19 };
+      console.dir(student);
+
+      let clockElement = document.getElementById("clock");
+      console.dirxml(clockElement);
+
+      console.time("Час циклу");
+      let sum = 0;
+      for (let i = 0; i < 100000; i++) {
+        sum += i;
+      }
+      console.timeEnd("Час циклу");
+
+      console.profile("Профіль");
+      for (let j = 0; j < 50000; j++) {
+        Math.sqrt(j);
+      }
+      console.profileEnd("Профіль");
+
+      let x = 10;
+      console.assert(x === 10, "Помилка не з'явиться");
+      console.assert(x === 5, "Помилка! x не дорівнює 5");
+    }
+
+
+    function runTask6() {
+      console.log("=== ЗАВДАННЯ 6 ===");
+
+      let names = ["Andriy", "Bohdan", "Olha", "Ihor", "Yuriy", "Taras", "Oksana", "Oleh", "Mariya"];
+      let vowels = ["A", "E", "I", "O", "U", "Y"];
+
+      for (let i = 0; i < names.length; i++) {
+        let name = names[i];
+        let firstLetter = name.charAt(0).toUpperCase();
+
+        if (vowels.includes(firstLetter)) {
+          console.log("Goodbye " + name);
+        } else {
+          console.log("Hello " + name);
+        }
+      }
+    }
+
+
+    function runTask7() {
+      console.log("=== ЗАВДАННЯ 7 ===");
+
+      console.info("Анотація: Алгоритм сумує ASCII-коди символів імені. Якщо сума >= 400 — High Weight, інакше — Low Weight.\n");
+
+      let names = ["Ira", "Volodymyr", "Oleh", "Kateryna", "Yana", "Svyatoslav", "Anna", "Yaroslav"];
+      let threshold = 400;
+
+      for (let i = 0; i < names.length; i++) {
+        let name = names[i];
+        let asciiSum = 0;
+
+        for (let j = 0; j < name.length; j++) {
+          asciiSum += name.charCodeAt(j);
+        }
+
+        if (asciiSum >= threshold) {
+          console.log("High Weight Name: %s (Сума ASCII = %d)", name, asciiSum);
+        } else {
+          console.log("Low Weight Name: %s (Сума ASCII = %d)", name, asciiSum);
+        }
+      }
+    }
+
+    runTask4();
+    runTask5();
+    runTask6();
+    runTask7();
+  </script>
+
+</body>
+</html>
