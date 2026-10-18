@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторна робота №4</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f9;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+    }
+
+    .burger-icon {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .nav-menu {
+      display: flex;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .nav-menu li {
+      margin-left: 20px;
+    }
+
+    .nav-menu a {
+      color: white;
+      text-decoration: none;
+      font-size: 16px;
+    }
+
+    .nav-menu a:hover {
+      text-decoration: underline;
+    }
+
+    @media (max-width: 600px) {
+      .burger-icon {
+        display: block;
+      }
+      .nav-menu {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+      }
+      .nav-menu.active {
+        display: flex;
+      }
+      .nav-menu li {
+        margin: 10px 0;
+      }
+      .nav-bar {
+        flex-wrap: wrap;
+      }
+    }
+
+    .tabs-header {
+      display: flex;
+      border-bottom: 2px solid #ccc;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #e0e0e0;
+      border: 1px solid #ccc;
+      border-bottom: none;
+      border-radius: 6px 6px 0 0;
+      margin-right: 5px;
+      font-weight: bold;
+    }
+
+    .tab-btn.active {
+      background-color: white;
+      border-bottom: 2px solid white;
+      margin-bottom: -2px;
+    }
+
+    .tab-content {
+      display: none;
+      background-color: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .question-block {
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 6px;
+    }
+
+    .question-block h4 {
+      margin-top: 0;
+    }
+
+    .btn-submit {
+      padding: 10px 20px;
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .btn-submit:hover {
+      background-color: #218838;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+
+    th {
+      background-color: #f0f0f0;
+    }
+
+    .total-score {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div><b>Навчальний Портал</b></div>
+    <div class="burger-icon" id="burger-btn">&#9776;</div>
+    <ul class="nav-menu" id="nav-menu">
+      <li><a href="#" onclick="switchTab('test-tab', 0)">Тестування</a></li>
+      <li><a href="#" onclick="switchTab('theory-tab', 1)">Теорія</a></li>
+      <li><a href="https://cnu.edu.ua/" target="_blank">Сайт КНУВС</a></li>
+    </ul>
+  </nav>
+
+  <div class="tabs-header">
+    <button class="tab-btn active" onclick="switchTab('test-tab', 0)">Тестування</button>
+    <button class="tab-btn" onclick="switchTab('theory-tab', 1)">Теоретичні відомості</button>
+  </div>
+
+  <div id="test-tab" class="tab-content active">
+    <h2>Тест з вебпрограмування (JavaScript)</h2>
+    <form id="quiz-form">
+
+      <div class="question-block">
+        <h4>Запитання 1: Яке ключове слово створює змінну в JS? (Радіокнопка)</h4>
+        <label><input type="radio" name="q1" value="1"> let</label><br>
+        <label><input type="radio" name="q1" value="-1"> float</label><br>
+        <label><input type="radio" name="q1" value="-1"> integer</label><br>
+        <label><input type="radio" name="q1" value="-1"> create</label>
+      </div>
+
+      <div class="question-block">
+        <h4>Запитання 2: Який метод виводить інформацію в консоль? (Радіокнопка)</h4>
+        <label><input type="radio" name="q2" value="-1"> print()</label><br>
+        <label><input type="radio" name="q2" value="1"> console.log()</label><br>
+        <label><input type="radio" name="q2" value="-1"> write.log()</label><br>
+        <label><input type="radio" name="q2" value="-1"> output()</label>
+      </div>
+
+      <div class="question-block">
+        <h4>Запитання 3: Оберіть 2 методи для роботи з масивами (Прапорці - 2 правильних):</h4>
+        <label><input type="checkbox" name="q3" value="1"> push()</label><br>
+        <label><input type="checkbox" name="q3" value="1"> pop()</label><br>
+        <label><input type="checkbox" name="q3" value="-1"> build()</label><br>
+        <label><input type="checkbox" name="q3" value="-1"> make()</label>
+      </div>
+
+      <div class="question-block">
+        <h4>Запитання 4: Оберіть 3 типи даних в JavaScript (Прапорці - 3 правильних):</h4>
+        <label><input type="checkbox" name="q4" value="1"> string</label><br>
+        <label><input type="checkbox" name="q4" value="1"> number</label><br>
+        <label><input type="checkbox" name="q4" value="1"> boolean</label><br>
+        <label><input type="checkbox" name="q4" value="-1"> character</label>
+      </div>
+
+      <div class="question-block">
+        <h4>Запитання 5: Яка подія спрацьовує при кліку? (Список одинарного вибору)</h4>
+        <select name="q5">
+          <option value="0">-- Оберіть відповідь --</option>
+          <option value="-1">onhover</option>
+          <option value="1">click</option>
+          <option value="-1">change</option>
+          <option value="-1">submit</option>
+        </select>
+      </div>
+
+      <div class="question-block">
+        <h4>Запитання 6: Оберіть 2 математичні методи об'єкта Math (Множинний список, Ctrl+клік):</h4>
+        <select name="q6" multiple size="4">
+          <option value="1">Math.sqrt()</option>
+          <option value="1">Math.pow()</option>
+          <option value="-1">Math.calculate()</option>
+          <option value="-1">Math.sum()</option>
+        </select>
+      </div>
+
+      <div class="question-block">
+        <h4>Запитання 7: Напишіть назву методу для пошуку елемента за ID (Текстове поле):</h4>
+        <input type="text" name="q7" placeholder="Введіть назву методу">
+      </div>
+
+      <button type="button" class="btn-submit" onclick="finishQuiz()">Завершити тестування</button>
+    </form>
+
+    <div id="results-area" style="display: none;">
+      <h3>Результати тестування</h3>
+      <table id="results-table">
+        <thead>
+          <tr>
+            <th>Запитання</th>
+            <th>Обрана відповідь</th>
+            <th>Бал</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      <div id="total-score" class="total-score"></div>
+    </div>
+  </div>
+
+  <div id="theory-tab" class="tab-content">
+    <h2>Теоретичні відомості</h2>
+    <h3>1. Пошук елементів в DOM</h3>
+    <p>Для пошуку HTML-елементів на сторінці в JavaScript використовуються такі основні методи:</p>
+    <ul>
+      <li><code>document.getElementById('id')</code> — знаходить елемент за його унікальним ідентифікатором ID.</li>
+      <li><code>document.getElementsByName('name')</code> — повертає колекцію елементів з відповідним атрибутом name.</li>
+      <li><code>document.querySelector('selector')</code> — повертає перший елемент, який відповідає CSS-селектору.</li>
+      <li><code>document.querySelectorAll('selector')</code> — повертає всі елементи у вигляді статичної колекції NodeList.</li>
+    </ul>
+
+    <h3>2. Опрацювання елементів форми</h3>
+    <p>Елементи форм дозволяють зчитувати значення, введені користувачем:</p>
+    <ul>
+      <li>Для **радіокнопок (radio)** та **прапорців (checkbox)** перевіряється властивість <code>checked</code>.</li>
+      <li>Для **випадаючих списків (select)** зчитується властивість <code>value</code> або обходяться вибрані елементи <code>option.selected</code>.</li>
+      <li>Для **текстових полів (input type="text")** значення зчитується через властивість <code>value</code>.</li>
+    </ul>
+  </div>
+
+  <script>
+    let burgerBtn = document.getElementById('burger-btn');
+    let navMenu = document.getElementById('nav-menu');
+
+    burgerBtn.addEventListener('click', function() {
+      navMenu.classList.toggle('active');
+    });
+
+    function switchTab(tabId, btnIndex) {
+      let contents = document.querySelectorAll('.tab-content');
+      contents.forEach(content => content.classList.remove('active'));
+
+      let buttons = document.querySelectorAll('.tab-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+
+      document.getElementById(tabId).classList.add('active');
+      buttons[btnIndex].classList.add('active');
+    }
+
+    function finishQuiz() {
+      let form = document.forms['quiz-form'];
+      let tbody = document.querySelector('#results-table tbody');
+      tbody.innerHTML = '';
+
+      let totalScore = 0;
+
+      let q1Options = form.elements['q1'];
+      let q1Ans = 'Не обрано';
+      let q1Score = 0;
+      for (let i = 0; i < q1Options.length; i++) {
+        if (q1Options[i].checked) {
+          q1Ans = q1Options[i].parentElement.textContent.trim();
+          q1Score = parseFloat(q1Options[i].value);
+        }
+      }
+      if (q1Score < 0) q1Score = 0;
+      totalScore += q1Score;
+      addTableRow('1: Яке ключове слово створює змінну?', q1Ans, q1Score);
+
+      let q2Options = form.elements['q2'];
+      let q2Ans = 'Не обрано';
+      let q2Score = 0;
+      for (let i = 0; i < q2Options.length; i++) {
+        if (q2Options[i].checked) {
+          q2Ans = q2Options[i].parentElement.textContent.trim();
+          q2Score = parseFloat(q2Options[i].value);
+        }
+      }
+      if (q2Score < 0) q2Score = 0;
+      totalScore += q2Score;
+      addTableRow('2: Який метод виводить інформацію в консоль?', q2Ans, q2Score);
+
+      let q3Options = form.elements['q3'];
+      let q3Selected = [];
+      let q3RawScore = 0;
+      for (let i = 0; i < q3Options.length; i++) {
+        if (q3Options[i].checked) {
+          q3Selected.push(q3Options[i].parentElement.textContent.trim());
+          q3RawScore += parseFloat(q3Options[i].value);
+        }
+      }
+      let q3Ans = q3Selected.length > 0 ? q3Selected.join(', ') : 'Не обрано';
+      let q3Score = q3RawScore < 0 ? 0 : q3RawScore;
+      totalScore += q3Score;
+      addTableRow('3: Оберіть 2 методи для роботи з масивами', q3Ans, q3Score);
+
+      let q4Options = form.elements['q4'];
+      let q4Selected = [];
+      let q4RawScore = 0;
+      for (let i = 0; i < q4Options.length; i++) {
+        if (q4Options[i].checked) {
+          q4Selected.push(q4Options[i].parentElement.textContent.trim());
+          q4RawScore += parseFloat(q4Options[i].value);
+        }
+      }
+      let q4Ans = q4Selected.length > 0 ? q4Selected.join(', ') : 'Не обрано';
+      let q4Score = q4RawScore < 0 ? 0 : q4RawScore;
+      totalScore += q4Score;
+      addTableRow('4: Оберіть 3 типи даних в JavaScript', q4Ans, q4Score);
+
+      let q5Select = form.elements['q5'];
+      let q5Ans = q5Select.options[q5Select.selectedIndex].text;
+      let q5Score = parseFloat(q5Select.value);
+      if (q5Select.value === "0") q5Ans = 'Не обрано';
+      if (q5Score < 0) q5Score = 0;
+      totalScore += q5Score;
+      addTableRow('5: Яка подія спрацьовує при кліку?', q5Ans, q5Score);
+
+      let q6Select = form.elements['q6'];
+      let q6Selected = [];
+      let q6RawScore = 0;
+      for (let i = 0; i < q6Select.options.length; i++) {
+        if (q6Select.options[i].selected) {
+          q6Selected.push(q6Select.options[i].text);
+          q6RawScore += parseFloat(q6Select.options[i].value);
+        }
+      }
+      let q6Ans = q6Selected.length > 0 ? q6Selected.join(', ') : 'Не обрано';
+      let q6Score = q6RawScore < 0 ? 0 : q6RawScore;
+      totalScore += q6Score;
+      addTableRow('6: Оберіть 2 математичні методи', q6Ans, q6Score);
+
+      let q7Input = form.elements['q7'].value.trim();
+      let q7Ans = q7Input !== '' ? q7Input : 'Не введено';
+      let q7Score = 0;
+      if (q7Input === 'getElementById' || q7Input === 'document.getElementById') {
+        q7Score = 1;
+      } else if (q7Input !== '') {
+        q7Score = 0;
+      }
+      totalScore += q7Score;
+      addTableRow('7: Метод для пошуку елемента за ID', q7Ans, q7Score);
+
+      document.getElementById('total-score').textContent = 'Загальний бал: ' + totalScore + ' з 10';
+      document.getElementById('results-area').style.display = 'block';
+    }
+
+    function addTableRow(question, answer, score) {
+      let tbody = document.querySelector('#results-table tbody');
+      let tr = document.createElement('tr');
+
+      let tdQ = document.createElement('td');
+      tdQ.textContent = question;
+
+      let tdA = document.createElement('td');
+      tdA.textContent = answer;
+
+      let tdS = document.createElement('td');
+      tdS.textContent = score;
+
+      tr.appendChild(tdQ);
+      tr.appendChild(tdA);
+      tr.appendChild(tdS);
+
+      tbody.appendChild(tr);
+    }
+  </script>
+
+</body>
+</html>
