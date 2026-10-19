@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторна робота №6 — Робота з рядками (Варіант 4)</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #f4f6f9;
+      color: #333;
+    }
+    h1, h2 {
+      color: #2c3e50;
+    }
+    .task {
+      background: #ffffff;
+      padding: 15px 20px;
+      margin-bottom: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="number"] {
+      width: 100%;
+      max-width: 450px;
+      padding: 8px;
+      margin-top: 5px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    button {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #2980b9;
+    }
+    .result {
+      margin-top: 10px;
+      padding: 10px;
+      background-color: #eef9fe;
+      border-left: 4px solid #3498db;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Лабораторна робота №6: Робота з рядками в JS (Варіант 4)</h1>
+
+  <div class="task">
+    <h2>Завдання 1. Довжина рядка</h2>
+    <label for="input1">Введіть рядок:</label>
+    <input type="text" id="input1" placeholder="Hello world">
+    <button onclick="runTask1()">Виконати</button>
+    <div id="result1" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 2. Верхній та нижній регістри</h2>
+    <label for="input2">Введіть рядок:</label>
+    <input type="text" id="input2" placeholder="JavaScript">
+    <button onclick="runTask2()">Виконати</button>
+    <div id="result2" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 3. Індекс першого входження символу</h2>
+    <label for="input3_str">Введіть рядок:</label>
+    <input type="text" id="input3_str" placeholder="Hello World">
+    <label for="input3_char">Введіть символ:</label>
+    <input type="text" id="input3_char" placeholder="o">
+    <button onclick="runTask3()">Виконати</button>
+    <div id="result3" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 4. Кількість входжень символу</h2>
+    <label for="input4_str">Введіть рядок:</label>
+    <input type="text" id="input4_str" value="hello world">
+    <label for="input4_char">Введіть символ:</label>
+    <input type="text" id="input4_char" value="o">
+    <button onclick="runTask4()">Виконати</button>
+    <div id="result4" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 5. Обмін сусідніх символів</h2>
+    <label for="input5">Введіть рядок:</label>
+    <input type="text" id="input5" value="abcdef">
+    <button onclick="runTask5()">Виконати</button>
+    <div id="result5" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 6. Перевірка спаму</h2>
+    <label for="input6">Введіть текст:</label>
+    <input type="text" id="input6" placeholder="тільки сьогодні">
+    <button onclick="runTask6()">Перевірити</button>
+    <div id="result6" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 7. Скорочення рядка (truncate)</h2>
+    <label for="input7_str">Введіть рядок:</label>
+    <input type="text" id="input7_str" value="Hello, world!">
+    <label for="input7_len">Максимальна довжина:</label>
+    <input type="number" id="input7_len" value="8">
+    <button onclick="runTask7()">Виконати</button>
+    <div id="result7" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 8 (Варіант 4: Перевірка на анаграму)</h2>
+    <label for="input8_str1">Перший рядок:</label>
+    <input type="text" id="input8_str1" value="listen">
+    <label for="input8_str2">Другий рядок:</label>
+    <input type="text" id="input8_str2" value="silent">
+    <button onclick="runTask8()">Перевірити</button>
+    <div id="result8" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 9 (Варіант 4: Пошук підрядка та вивід його індексу)</h2>
+    <label for="input9_str">Основний рядок:</label>
+    <input type="text" id="input9_str" value="JavaScript is awesome">
+    <label for="input9_sub">Підрядок для пошуку:</label>
+    <input type="text" id="input9_sub" value="Script">
+    <button onclick="runTask9()">Знайти</button>
+    <div id="result9" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <div class="task">
+    <h2>Завдання 10 (Варіант 4: Заміна заборонених слів)</h2>
+    <label for="input10_str">Введіть текст:</label>
+    <input type="text" id="input10_str" value="Це badword і secretword в тексті">
+    <label for="input10_words">Заборонені слова (через кому):</label>
+    <input type="text" id="input10_words" value="badword, secretword">
+    <button onclick="runTask10()">Замінити</button>
+    <div id="result10" class="result">Результат з'явиться тут</div>
+  </div>
+
+  <script>
+    function getStringLength(str) {
+      return str.length;
+    }
+
+    function runTask1() {
+      let str = document.getElementById('input1').value;
+      let len = getStringLength(str);
+      document.getElementById('result1').innerText = "Довжина рядка: " + len;
+    }
+
+    function toUpper(str) {
+      return str.toUpperCase();
+    }
+
+    function toLower(str) {
+      return str.toLowerCase();
+    }
+
+    function runTask2() {
+      let str = document.getElementById('input2').value;
+      let upper = toUpper(str);
+      let lower = toLower(str);
+      document.getElementById('result2').innerText = "Верхній регістр: " + upper + " | Нижній регістр: " + lower;
+    }
+
+    function findFirstIndex(str, char) {
+      return str.indexOf(char);
+    }
+
+    function runTask3() {
+      let str = document.getElementById('input3_str').value;
+      let char = document.getElementById('input3_char').value;
+      let index = findFirstIndex(str, char);
+      document.getElementById('result3').innerText = "Індекс першого входження: " + index;
+    }
+
+    function countCharOccurrences(str, char) {
+      let count = 0;
+      for (let i = 0; i < str.length; i++) {
+        if (str[i] === char) {
+          count++;
+        }
+      }
+      return count;
+    }
+
+    function runTask4() {
+      let str = document.getElementById('input4_str').value;
+      let char = document.getElementById('input4_char').value;
+      let count = countCharOccurrences(str, char);
+      document.getElementById('result4').innerText = "Кількість входжень: " + count;
+    }
+
+    function swapPairs(str) {
+      let result = "";
+      for (let i = 0; i < str.length; i += 2) {
+        if (i + 1 < str.length) {
+          result += str[i + 1] + str[i];
+        } else {
+          result += str[i];
+        }
+      }
+      return result;
+    }
+
+    function runTask5() {
+      let str = document.getElementById('input5').value;
+      let swapped = swapPairs(str);
+      document.getElementById('result5').innerText = "Результат: " + swapped;
+    }
+
+    function checkSpam(str) {
+      let lowerStr = str.toLowerCase();
+      let spamWords = ["100% безкоштовно", "збільшення продажів", "тільки сьогодні", "не видаляйте"];
+      
+      for (let i = 0; i < spamWords.length; i++) {
+        if (lowerStr.includes(spamWords[i])) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function runTask6() {
+      let str = document.getElementById('input6').value;
+      let isSpam = checkSpam(str);
+      document.getElementById('result6').innerText = "Спам виявлено: " + isSpam;
+    }
+
+    function truncate(str, maxlength) {
+      if (str.length > maxlength) {
+        return str.slice(0, maxlength - 3) + "...";
+      }
+      return str;
+    }
+
+    function runTask7() {
+      let str = document.getElementById('input7_str').value;
+      let len = parseInt(document.getElementById('input7_len').value);
+      let truncated = truncate(str, len);
+      document.getElementById('result7').innerText = "Результат: " + truncated;
+    }
+
+    function isAnagram(str1, str2) {
+      let s1 = str1.toLowerCase().replace(/\s+/g, "");
+      let s2 = str2.toLowerCase().replace(/\s+/g, "");
+      
+      if (s1.length !== s2.length) {
+        return false;
+      }
+
+      let sorted1 = s1.split("").sort().join("");
+      let sorted2 = s2.split("").sort().join("");
+      
+      return sorted1 === sorted2;
+    }
+
+    function runTask8() {
+      let str1 = document.getElementById('input8_str1').value;
+      let str2 = document.getElementById('input8_str2').value;
+      let res = isAnagram(str1, str2);
+      document.getElementById('result8').innerText = "Чи є рядки анаграмою: " + res;
+    }
+
+    function findSubstring(str, sub) {
+      return str.indexOf(sub);
+    }
+
+    function runTask9() {
+      let str = document.getElementById('input9_str').value;
+      let sub = document.getElementById('input9_sub').value;
+      let index = findSubstring(str, sub);
+      document.getElementById('result9').innerText = "Індекс підрядка: " + index;
+    }
+
+    function maskForbiddenWords(text, forbiddenArray) {
+      let words = text.split(" ");
+      
+      for (let i = 0; i < words.length; i++) {
+        for (let j = 0; j < forbiddenArray.length; j++) {
+          let forbidden = forbiddenArray[j].trim();
+          
+          if (words[i] === forbidden) {
+            if (forbidden.length > 2) {
+              let firstChar = forbidden[0];
+              let lastChar = forbidden[forbidden.length - 1];
+              let middleStars = "*".repeat(forbidden.length - 2);
+              words[i] = firstChar + middleStars + lastChar;
+            } else {
+              words[i] = "*".repeat(forbidden.length);
+            }
+          }
+        }
+      }
+      
+      return words.join(" ");
+    }
+
+    function runTask10() {
+      let text = document.getElementById('input10_str').value;
+      let wordsInput = document.getElementById('input10_words').value;
+      let forbiddenArray = wordsInput.split(",");
+      
+      let maskedText = maskForbiddenWords(text, forbiddenArray);
+      document.getElementById('result10').innerText = "Результат: " + maskedText;
+    }
+  </script>
+</body>
+</html>
