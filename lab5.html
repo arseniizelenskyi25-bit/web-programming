@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <title>Лабораторна робота 5 — Регулярні вирази JS</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      line-height: 1.5;
+    }
+    h2 {
+      color: #333;
+      border-bottom: 2px solid #333;
+      padding-bottom: 5px;
+    }
+    .section {
+      margin-bottom: 40px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: inline-block;
+      width: 160px;
+      font-weight: bold;
+    }
+    input {
+      padding: 6px 10px;
+      width: 250px;
+      border: 2px solid #ccc;
+      border-radius: 4px;
+      outline: none;
+      font-size: 14px;
+    }
+    input.valid {
+      border-color: green;
+      color: black;
+    }
+    input.invalid {
+      border-color: red;
+      color: red;
+    }
+    .status {
+      margin-left: 10px;
+      font-size: 14px;
+    }
+    .status.valid-icon {
+      color: green;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .status.error-msg {
+      color: red;
+    }
+    button {
+      padding: 8px 16px;
+      font-size: 15px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="section">
+    <h2>Завдання 1. Вивід елементів e-mail</h2>
+    <div id="task1-output"></div>
+    <script>
+      let s = "dwbyu@mail.ua";
+      let r = /^([a-z0-9]+)(\.[a-z0-9]+)*@([a-z0-9]+)(\.[a-z0-9]+)*$/i;
+      let a = s.match(r);
+      
+      let outputHtml = "";
+      if (a) {
+        for (let i = 0; i < a.length; i++) {
+          outputHtml += "<hr> a[" + i + "] " + a[i];
+        }
+      } else {
+        outputHtml = "E-mail не відповідає регулярному виразу.";
+      }
+      document.getElementById("task1-output").innerHTML = outputHtml;
+    </script>
+  </div>
+
+  <div class="section">
+    <h2>Завдання 2. Форма з валідацією</h2>
+
+    <form id="regForm">
+      <div class="form-group">
+        <label for="email">E-mail:</label>
+        <input type="text" id="email">
+        <span class="status" id="emailStatus"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="fullname">Ім’я та Прізвище:</label>
+        <input type="text" id="fullname">
+        <span class="status" id="fullnameStatus"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="login">Логін:</label>
+        <input type="text" id="login">
+        <span class="status" id="loginStatus"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Пароль:</label>
+        <input type="password" id="password">
+        <span class="status" id="passwordStatus"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="postcode">Поштовий індекс:</label>
+        <input type="text" id="postcode">
+        <span class="status" id="postcodeStatus"></span>
+      </div>
+
+      <button type="button" onclick="validateForm()">Перевірити</button>
+    </form>
+  </div>
+
+  <script>
+    function validateForm() {
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@pnu\.edu\.ua$/;
+      const fullnameRegex = /^([A-ZА-ЯІЇЄҐ][a-zа-яіїєґ]+)\s([A-ZА-ЯІЇЄҐ]+)$/;
+      const loginRegex = /^[a-zA-Z]+$/;
+      const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[_\-!@#$%^&*]).{8,}$/;
+      const postcodeRegex = /^\d{5}$/;
+
+      checkField(
+        'email', 
+        emailRegex, 
+        'Адреса повинна бути на домені @pnu.edu.ua'
+      );
+
+      checkField(
+        'fullname', 
+        fullnameRegex, 
+        'Формат: "Ім\'я ПРІЗВИЩЕ" (перша літера першого слова велика, друге слово — всі великі)'
+      );
+
+      checkField(
+        'login', 
+        loginRegex, 
+        'Логін повинен містити тільки латинські літери'
+      );
+
+      checkField(
+        'password', 
+        passwordRegex, 
+        'Мін. 8 символів: принаймні 1 буква, 1 цифра та 1 спецсимвол (_-!@#$%^&*)'
+      );
+
+      checkField(
+        'postcode', 
+        postcodeRegex, 
+        'Індекс повинен складатися з 5 цифр'
+      );
+    }
+
+    function checkField(fieldId, regex, errorMessage) {
+      const input = document.getElementById(fieldId);
+      const statusSpan = document.getElementById(fieldId + 'Status');
+      const value = input.value.trim();
+
+      if (regex.test(value)) {
+        input.className = 'valid';
+        statusSpan.className = 'status valid-icon';
+        statusSpan.innerHTML = '&#10004;';
+      } else {
+        input.className = 'invalid';
+        statusSpan.className = 'status error-msg';
+        statusSpan.innerText = errorMessage;
+      }
+    }
+  </script>
+</body>
+</html>
