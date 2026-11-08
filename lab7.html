@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №7</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .section {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        button.clear-btn {
+            background-color: #e74c3c;
+        }
+        button.clear-btn:hover {
+            background-color: #c0392b;
+        }
+        input[type="number"], input[type="text"] {
+            padding: 6px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            width: 200px;
+            display: block;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 5px;
+        }
+        .result-box {
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #eef7fc;
+            border-left: 4px solid #3498db;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Лабораторна робота №7</h1>
+    <p><strong>Тема:</strong> Робота з об'єктами. Вбудований об’єкт Date. Класи в JavaScript.</p>
+
+    <div class="section">
+        <h2>Завдання 1: Об'єкт часу та його зміна</h2>
+        <p><strong>Поточний час об'єкта:</strong> <span id="time-display" style="font-weight: bold;">--:--:--</span></p>
+        
+        <div>
+            <label for="seconds-input">Додати секунди:</label>
+            <input type="number" id="seconds-input" value="30">
+            <button onclick="addSecondsToTime()">Змінити час</button>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Завдання 2: Робота з датами (Date)</h2>
+        
+        <h3>Завдання 2.1. Виведення поточної дати, дня тижня і часу</h3>
+        <button onclick="showCurrentDate()">Виконати</button>
+        <div id="res-2-1" class="result-box">Натисніть "Виконати" для перегляду...</div>
+
+        <h3>Завдання 2.2. Останній день місяця</h3>
+        <label for="year-input">Рік:</label>
+        <input type="number" id="year-input" value="2026" style="width: 100px;">
+        <label for="month-input">Місяць (1-12):</label>
+        <input type="number" id="month-input" value="2" min="1" max="12" style="width: 100px;">
+        <button onclick="showLastDay()">Визначити день</button>
+        <div id="res-2-2" class="result-box">Натисніть кнопку...</div>
+
+        <h3>Завдання 2.3. Секунди від початку і до кінця дня</h3>
+        <button onclick="showSecondsInfo()">Розрахувати секунди</button>
+        <div id="res-2-3" class="result-box">Натисніть кнопку...</div>
+    </div>
+
+    <div class="section">
+        <h2>Завдання 3, 4, 5: Класи в JavaScript</h2>
+        
+        <h3>Завдання 3 (Клас Car)</h3>
+        <div id="res-task3" class="result-box"></div>
+
+        <h3>Завдання 4 (Успадкування: Клас ElectricCar)</h3>
+        <div id="res-task4" class="result-box"></div>
+
+        <h3>Завдання 5 (Статичний метод MathHelper)</h3>
+        <div id="res-task5" class="result-box"></div>
+    </div>
+
+    <div class="section">
+        <h2>Завдання 6: Індивідуальне завдання (Варіант 4)</h2>
+        <form id="bank-form" onsubmit="return false;">
+            <label for="owner">ПІБ власника рахунку:</label>
+            <input type="text" id="owner" placeholder="напр. Іван Петренко">
+
+            <label for="balance">Початковий баланс (грн):</label>
+            <input type="number" id="balance" placeholder="напр. 1000">
+
+            <label for="interestRate">Відсоткова ставка (%):</label>
+            <input type="number" id="interestRate" placeholder="напр. 5">
+
+            <label for="depositAmount">Сума для поповнення (грн):</label>
+            <input type="number" id="depositAmount" placeholder="напр. 500">
+
+            <label for="withdrawAmount">Сума для зняття (грн):</label>
+            <input type="number" id="withdrawAmount" placeholder="напр. 200">
+
+            <button onclick="processBankTask()">Показати інформацію</button>
+            <button onclick="clearBankForm()" class="clear-btn">Очистити поля</button>
+        </form>
+
+        <div id="res-task6" class="result-box" style="display: none;"></div>
+    </div>
+
+    <script>
+        const myTime = {
+            hours: 20,
+            minutes: 30,
+            seconds: 45
+        };
+
+        function formatNumber(num) {
+            return num < 10 ? '0' + num : num;
+        }
+
+        function displayTime() {
+            const timeString = `${formatNumber(myTime.hours)}:${formatNumber(myTime.minutes)}:${formatNumber(myTime.seconds)}`;
+            document.getElementById('time-display').innerText = timeString;
+        }
+
+        function addSecondsToTime() {
+            const inputField = document.getElementById('seconds-input');
+            let secondsToAdd = parseInt(inputField.value);
+
+            if (isNaN(secondsToAdd)) return;
+
+            let totalSeconds = myTime.hours * 3600 + myTime.minutes * 60 + myTime.seconds + secondsToAdd;
+            const DAY_IN_SECONDS = 86400;
+            totalSeconds = (totalSeconds % DAY_IN_SECONDS + DAY_IN_SECONDS) % DAY_IN_SECONDS;
+
+            myTime.hours = Math.floor(totalSeconds / 3600);
+            myTime.minutes = Math.floor((totalSeconds % 3600) / 60);
+            myTime.seconds = totalSeconds % 60;
+
+            displayTime();
+        }
+
+        displayTime();
+
+        function showCurrentDate() {
+            const now = new Date();
+
+            const months = [
+                "січня", "лютого", "березня", "квітня", "травня", "червня",
+                "липня", "серпня", "вересня", "жовтня", "листопада", "грудня"
+            ];
+            
+            const daysOfWeek = [
+                "неділя", "понеділок", "вівторок", "середа", 
+                "четвер", "п'ятниця", "субота"
+            ];
+
+            const day = now.getDate();
+            const month = months[now.getMonth()];
+            const year = now.getFullYear();
+            const dayOfWeek = daysOfWeek[now.getDay()];
+            
+            const hours = formatNumber(now.getHours());
+            const minutes = formatNumber(now.getMinutes());
+
+            const resultText = `Дата: ${day} ${month} ${year} року\nДень тижня: ${dayOfWeek}\nЧас: ${hours}:${minutes}`;
+            document.getElementById('res-2-1').innerText = resultText;
+        }
+
+        function showLastDay() {
+            const year = parseInt(document.getElementById('year-input').value);
+            const month = parseInt(document.getElementById('month-input').value);
+
+            if (isNaN(year) || isNaN(month) || month < 1 || month > 12) {
+                document.getElementById('res-2-2').innerText = "Введіть коректні дані!";
+                return;
+            }
+
+            const lastDayDate = new Date(year, month, 0);
+            const lastDay = lastDayDate.getDate();
+
+            document.getElementById('res-2-2').innerText = `Останній день місяця: ${lastDay}`;
+        }
+
+        function getSecondsOfDay() {
+            const now = new Date();
+
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const startOfNextDay = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1);
+
+            const secondsPassed = Math.floor((now - startOfDay) / 1000);
+            const secondsLeft = Math.floor((startOfNextDay - now) / 1000);
+
+            return {
+                passed: secondsPassed,
+                left: secondsLeft
+            };
+        }
+
+        function showSecondsInfo() {
+            const info = getSecondsOfDay();
+            document.getElementById('res-2-3').innerText = 
+                `Пройшло від початку дня: ${info.passed} сек.\nЗалишилось до наступного дня: ${info.left} сек.`;
+        }
+
+        class Car {
+            constructor(brand, model, year) {
+                this.brand = brand;
+                this.model = model;
+                this.year = year;
+            }
+
+            info() {
+                return `Авто: ${this.brand} ${this.model}, ${this.year} року.`;
+            }
+        }
+
+        const car1 = new Car("Toyota", "Camry", 2020);
+        document.getElementById('res-task3').innerText = car1.info();
+
+        class ElectricCar extends Car {
+            constructor(brand, model, year, battery) {
+                super(brand, model, year);
+                this.battery = battery;
+            }
+
+            charge() {
+                return `${this.brand} ${this.model} заряджається... Батарея: ${this.battery} kWh`;
+            }
+        }
+
+        const tesla = new ElectricCar("Tesla", "Model 3", 2022, 75);
+        document.getElementById('res-task4').innerText = `${tesla.info()}\n${tesla.charge()}`;
+
+        class MathHelper {
+            static add(a, b) {
+                return a + b;
+            }
+        }
+
+        const sumResult = MathHelper.add(5, 7);
+        document.getElementById('res-task5').innerText = `Результат MathHelper.add(5, 7): ${sumResult}`;
+
+        class BankAccount {
+            static bankName = "Національний Банк";
+
+            constructor(owner, balance) {
+                this.owner = owner;
+                this.balance = Number(balance);
+            }
+
+            deposit(amount) {
+                amount = Number(amount);
+                if (amount > 0) {
+                    this.balance += amount;
+                    return `Поповнено на ${amount} грн. Поточний баланс: ${this.balance} грн.`;
+                }
+                return `Сума поповнення має бути більшою за 0.`;
+            }
+
+            withdraw(amount) {
+                amount = Number(amount);
+                if (amount <= 0) {
+                    return `Сума зняття має бути більшою за 0.`;
+                }
+                if (amount > this.balance) {
+                    return `Помилка: Недостатньо коштів на рахунку! Спроба зняти ${amount} грн при балансі ${this.balance} грн.`;
+                }
+                this.balance -= amount;
+                return `Знято ${amount} грн. Залишок на рахунку: ${this.balance} грн.`;
+            }
+
+            getInfo() {
+                return `Банк: ${BankAccount.bankName}\nВласник: ${this.owner}\nБаланс: ${this.balance} грн.`;
+            }
+        }
+
+        class SavingsAccount extends BankAccount {
+            constructor(owner, balance, interestRate) {
+                super(owner, balance);
+                this.interestRate = Number(interestRate);
+            }
+
+            addInterest() {
+                const interest = (this.balance * this.interestRate) / 100;
+                this.balance += interest;
+                return `Нараховано відсотки (${this.interestRate}%): +${interest} грн. Новий баланс: ${this.balance} грн.`;
+            }
+        }
+
+        function processBankTask() {
+            const owner = document.getElementById('owner').value.trim();
+            const balance = document.getElementById('balance').value;
+            const interestRate = document.getElementById('interestRate').value;
+            const depositAmount = document.getElementById('depositAmount').value;
+            const withdrawAmount = document.getElementById('withdrawAmount').value;
+            const resultBox = document.getElementById('res-task6');
+
+            if (!owner || balance === "" || interestRate === "") {
+                resultBox.style.display = "block";
+                resultBox.innerText = "Будь ласка, заповніть обов'язкові поля (ПІБ, Початковий баланс, Відсоткова ставка)!";
+                return;
+            }
+
+            const account = new SavingsAccount(owner, balance, interestRate);
+
+            let output = `--- ІНФОРМАЦІЯ ПРО РАХУНОК ---\n`;
+            output += account.getInfo() + `\nВідсоткова ставка: ${account.interestRate}%\n\n`;
+
+            output += `--- ОПЕРАЦІЇ ---\n`;
+
+            if (depositAmount !== "" && Number(depositAmount) > 0) {
+                output += account.deposit(depositAmount) + `\n`;
+            }
+
+            if (withdrawAmount !== "" && Number(withdrawAmount) > 0) {
+                output += account.withdraw(withdrawAmount) + `\n`;
+            }
+
+            output += account.addInterest() + `\n`;
+
+            output += `\n--- ПІДСУМОК ---\nКінцевий баланс: ${account.balance} грн.`;
+
+            resultBox.style.display = "block";
+            resultBox.innerText = output;
+        }
+
+        function clearBankForm() {
+            document.getElementById('owner').value = "";
+            document.getElementById('balance').value = "";
+            document.getElementById('interestRate').value = "";
+            document.getElementById('depositAmount').value = "";
+            document.getElementById('withdrawAmount').value = "";
+
+            const resultBox = document.getElementById('res-task6');
+            resultBox.innerText = "";
+            resultBox.style.display = "none";
+        }
+    </script>
+</body>
+</html>
