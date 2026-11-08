@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лабораторна робота №8</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f6f9;
+            color: #333;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        .section {
+            background: #ffffff;
+            border: 1px solid #ddd;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            font-size: 14px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 5px;
+            margin-right: 5px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .track {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 50px;
+            background-color: #eef7fc;
+            border: 1px solid #bce8f1;
+            margin-top: 10px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .block {
+            position: absolute;
+            top: 5px;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+        }
+        #train {
+            background-color: #e74c3c;
+        }
+        #progress-bar {
+            background-color: #2ecc71;
+            width: 0%;
+            height: 100%;
+            top: 0;
+        }
+        #bounce-ball {
+            background-color: #f39c12;
+            border-radius: 50%;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 320px;
+            background-color: #1e272e;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 15px;
+            border: 2px solid #34495e;
+        }
+        .logo-center {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(1);
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #00d2d3, #54a0ff);
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            box-shadow: 0 0 15px rgba(0, 210, 211, 0.5);
+            z-index: 2;
+        }
+        .orbit-object {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background-color: #ff9ff3;
+            border-radius: 50%;
+            z-index: 2;
+        }
+        .dynamic-gear {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            background-color: #feca57;
+            border-radius: 8px;
+            opacity: 0;
+            transform: scale(0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            z-index: 2;
+        }
+        .typing-text {
+            position: absolute;
+            bottom: 25px;
+            width: 100%;
+            text-align: center;
+            color: #2ed573;
+            font-family: monospace;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Лабораторна робота №8</h1>
+    <p><strong>Тема:</strong> JavaScript-анімації</p>
+
+    <div class="section">
+        <h2>Завдання 1: Приклади з теоретичних відомостей</h2>
+        
+        <h3>1.1. Анімація через setInterval</h3>
+        <button onclick="runIntervalAnimation()">Запустити setInterval</button>
+        <div class="track">
+            <div id="train" class="block"></div>
+        </div>
+
+        <h3>1.2. Універсальна анімація через requestAnimationFrame (Linear)</h3>
+        <button onclick="runAnimateWidth()">Запустити width: 0% -> 100%</button>
+        <div class="track">
+            <div id="progress-bar" class="block"></div>
+        </div>
+
+        <h3>1.3. Анімація з функцією часу (Bounce EaseOut)</h3>
+        <button onclick="runBounceAnimation()">Запустити Bounce</button>
+        <div class="track">
+            <div id="bounce-ball" class="block"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Завдання 2: Анімований логотип спеціальності «ІПЗ»</h2>
+        <p>Натисніть кнопку для запуску або зупинки анімації. При повторному натисканні анімація продовжується з місця зупинки.</p>
+        
+        <button id="toggle-logo-btn" onclick="toggleLogoAnimation()">Старт</button>
+
+        <div class="logo-container">
+            <div id="logo-center" class="logo-center">ІПЗ</div>
+            <div id="orbit-obj" class="orbit-object"></div>
+            <div id="dynamic-gear" class="dynamic-gear">⚙️</div>
+            <div id="typing-text" class="typing-text"></div>
+        </div>
+    </div>
+
+    <script>
+        function animate({timing, draw, duration}) {
+            let start = performance.now();
+
+            requestAnimationFrame(function animateFrame(time) {
+                let timeFraction = (time - start) / duration;
+                if (timeFraction > 1) timeFraction = 1;
+
+                let progress = timing(timeFraction);
+                draw(progress);
+
+                if (timeFraction < 1) {
+                    requestAnimationFrame(animateFrame);
+                }
+            });
+        }
+
+        function runIntervalAnimation() {
+            const train = document.getElementById('train');
+            let start = Date.now();
+
+            let timer = setInterval(function() {
+                let timePassed = Date.now() - start;
+
+                if (timePassed >= 2000) {
+                    clearInterval(timer);
+                    train.style.left = '560px';
+                    return;
+                }
+
+                train.style.left = (timePassed / 2000) * 560 + 'px';
+            }, 20);
+        }
+
+        function runAnimateWidth() {
+            const progressBar = document.getElementById('progress-bar');
+            animate({
+                duration: 1500,
+                timing(timeFraction) {
+                    return timeFraction;
+                },
+                draw(progress) {
+                    progressBar.style.width = progress * 100 + '%';
+                }
+            });
+        }
+
+        function bounce(timeFraction) {
+            for (let a = 0, b = 1; 1; a += b, b /= 2) {
+                if (timeFraction >= (7 - 4 * a) / 11) {
+                    return -Math.pow((11 - 6 * a - 11 * timeFraction) / 4, 2) + Math.pow(b, 2);
+                }
+            }
+        }
+
+        function makeEaseOut(timing) {
+            return function(timeFraction) {
+                return 1 - timing(1 - timeFraction);
+            };
+        }
+
+        function runBounceAnimation() {
+            const ball = document.getElementById('bounce-ball');
+            const bounceEaseOut = makeEaseOut(bounce);
+
+            animate({
+                duration: 2000,
+                timing: bounceEaseOut,
+                draw(progress) {
+                    ball.style.left = progress * 560 + 'px';
+                }
+            });
+        }
+
+        let isRunning = false;
+        let animationFrameId = null;
+        let lastTime = performance.now();
+        let elapsedTime = 0;
+        const cycleDuration = 4000;
+
+        const fullText = "SOFTWARE ENGINEERING";
+
+        const logoCenter = document.getElementById('logo-center');
+        const orbitObj = document.getElementById('orbit-obj');
+        const dynamicGear = document.getElementById('dynamic-gear');
+        const typingText = document.getElementById('typing-text');
+        const toggleBtn = document.getElementById('toggle-logo-btn');
+
+        function updateLogoState(progress) {
+            let scale = 1 + 0.3 * Math.sin(progress * Math.PI * 2);
+            logoCenter.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
+            let angle = progress * Math.PI * 2;
+            let radiusX = 220;
+            let radiusY = 100;
+            let centerX = 300 - 15;
+            let centerY = 160 - 15;
+
+            let x = centerX + radiusX * Math.cos(angle);
+            let y = centerY + radiusY * Math.sin(angle);
+            let orbitScale = 0.6 + 0.6 * (Math.sin(angle) + 1) / 2;
+
+            orbitObj.style.left = x + 'px';
+            orbitObj.style.top = y + 'px';
+            orbitObj.style.transform = `scale(${orbitScale})`;
+
+            if (progress > 0.3) {
+                let gearProgress = (progress - 0.3) / 0.7;
+                dynamicGear.style.opacity = Math.min(1, gearProgress * 2);
+                dynamicGear.style.transform = `scale(${Math.min(1, gearProgress * 2)}) rotate(${progress * 720}deg)`;
+            } else {
+                dynamicGear.style.opacity = 0;
+                dynamicGear.style.transform = 'scale(0)';
+            }
+
+            let textLength = Math.floor(progress * (fullText.length + 5));
+            if (textLength > fullText.length) textLength = fullText.length;
+            typingText.innerText = fullText.substring(0, textLength);
+        }
+
+        function logoAnimationLoop(now) {
+            if (!isRunning) return;
+
+            let delta = now - lastTime;
+            lastTime = now;
+            elapsedTime += delta;
+
+            let currentProgress = (elapsedTime % cycleDuration) / cycleDuration;
+            updateLogoState(currentProgress);
+
+            animationFrameId = requestAnimationFrame(logoAnimationLoop);
+        }
+
+        function toggleLogoAnimation() {
+            if (isRunning) {
+                isRunning = false;
+                cancelAnimationFrame(animationFrameId);
+                toggleBtn.innerText = "Продовжити";
+            } else {
+                isRunning = true;
+                lastTime = performance.now();
+                animationFrameId = requestAnimationFrame(logoAnimationLoop);
+                toggleBtn.innerText = "Пауза";
+            }
+        }
+    </script>
+</body>
+</html>
